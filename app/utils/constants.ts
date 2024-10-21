@@ -23,9 +23,7 @@ const staticModels: ModelInfo[] = [
   { name: 'granite3-dense:8b', label: 'granite 3 dense 8B', provider: 'Ollama' },
   { name: 'solar-pro:22b', label: 'solar pro 22B', provider: 'Ollama' },
   { name: 'yi-coder:9b', label: 'yi coder 9B', provider: 'Ollama' },
-  { name: ' ', label: ' ', provider: 'Ollama' },
-  { name: ' ', label: ' ', provider: 'Ollama' },
-  { name: ' ', label: ' ', provider: 'Ollama' },
+  { name: 'deepseek-coder-v2:236b', label: 'deepseek coder v2 236B', provider: 'Ollama' },
 ];
 
 export let MODEL_LIST: ModelInfo[] = [...staticModels];
@@ -33,14 +31,14 @@ export let MODEL_LIST: ModelInfo[] = [...staticModels];
 async function getOllamaModels(): Promise<ModelInfo[]> {
   try {
     const response = await fetch(`http://localhost:11434/api/tags`);
-    const data = await response.json();
+    const data: { models: Array<{ name: string; details: { parameter_size: string } }> } = await response.json();
 
-    return data.models.map((model: any) => ({
+    return data.models.map((model) => ({
       name: model.name,
       label: `${model.name} (${model.details.parameter_size})`,
       provider: 'Ollama',
     }));
-  } catch (e) {
+  } catch {
     return [];
   }
 }
